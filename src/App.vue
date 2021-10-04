@@ -41,7 +41,7 @@
       <!-- {{gameStructure}} -->
     </div>
 
-    <div class="play-game" style="max-width: 720px; margin: 0px auto;">
+    <div class="play-game" v-if="gameSelected" style="max-width: 720px; margin: 0px auto;">
       <div class="button-header" style="padding: 8px 0px;">
         <vs-row vs-justify="flex-end">
           <vs-button color="primary" style="margin-right: 10px;" type="filled" icon="fullscreen"></vs-button>
@@ -115,10 +115,10 @@
     }),
     computed: {
       searchedData: function() {
-        let searchPattern = new RegExp(this.search)
+        let searchPattern = new RegExp(this.search.toLowerCase())
 
         return gameStructure.games.filter(game => {
-          return searchPattern.test(game.name)
+          return searchPattern.test(game.name.toLowerCase())
         })
       },
       gameTitle: function() {
