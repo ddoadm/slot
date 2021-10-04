@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h3 class="header-text">Pragmatic Play Slot Demo</h3>
+    <h3 class="header-text" v-html="gameTitle"></h3>
     <div class="header-input" v-if="!gameSelected">
       <vs-input icon="search" label="Search" placeholder="Search" v-model="search"/>
       <vs-select
@@ -14,7 +14,7 @@
 
     <div class="game-list" v-if="!gameSelected">
       <vs-row vs-justify="center">
-        <vs-col class="game" v-for="g in searchedData" type="flex" vs-justify="center" vs-align="center" vs-lg="3" vs-sm="4" vs-xs="6">
+        <vs-col class="game" v-for="g,i in searchedData" type="flex" vs-justify="center" vs-align="center" vs-lg="3" vs-sm="4" vs-xs="6" :key="i">
           <vs-card class="cardx" fixedHeight>
             <div slot="header">
               <h3 v-html="g.name"></h3>
@@ -41,10 +41,15 @@
       <!-- {{gameStructure}} -->
     </div>
 
-    <div class="play-game" >
-      <h4 v-html="searchedData[gameSelected].name" style="text-align: center;padding: 8px;"></h4>
+    <div class="play-game" style="max-width: 720px; margin: 0px auto;">
+      <div class="button-header" style="padding: 8px 0px;">
+        <vs-row vs-justify="flex-end">
+          <vs-button color="primary" style="margin-right: 10px;" type="filled" icon="fullscreen"></vs-button>
+          <vs-button color="danger" type="filled" icon="close" @click="clearSelected"></vs-button>
+        </vs-row>
+      </div>
       <div class="container-iframe">
-        <iframe src="" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
+        <iframe :src="selectedGame" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -78,23 +83,23 @@
     padding: 8px;
   }
   .container-iframe {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding-top: 75%; /* 4:3 Aspect Ratio */
-}
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%; /* 4:3 Aspect Ratio */
+  }
 
-/* Then style the iframe to fit in the container div with full height and width */
-.responsive-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+  /* Then style the iframe to fit in the container div with full height and width */
+  .responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
 </style>
 
 <script>
@@ -106,7 +111,7 @@
       search: '',
       currencies: currencyData,
       currency: 'IDR',
-      gameSelected: '3'
+      gameSelected: ''
     }),
     computed: {
       searchedData: function() {
@@ -115,6 +120,20 @@
         return gameStructure.games.filter(game => {
           return searchPattern.test(game.name)
         })
+      },
+      gameTitle: function() {
+        return this.gameSelected ? gameStructure.games[this.gameSelected].name : 'Pragmatic Play Slot Demo'
+      },
+      selectedGame: function() {
+        let symbol = this.gameSelected ? this.searchedData[this.gameSelected].symbol : ''
+
+        return !this.gameSelected ? '' : `${gameStructure.gameURL}?gameSymbol=${symbol}&lang=en&cur=${this.currency}&jurisdiction`
+      }
+    },
+    methods: {
+      clearSelected() {
+        this.gameSelected = ''
+        this.search = ''
       }
     }
   }
