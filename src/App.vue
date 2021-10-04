@@ -127,7 +127,7 @@
       selectedGame: function() {
         let symbol = this.gameSelected ? this.searchedData[this.gameSelected].symbol : ''
 
-        return !this.gameSelected ? '' : `${gameStructure.gameURL}?gameSymbol=${symbol}&lang=en&cur=${this.currency}&jurisdiction`
+        return !this.gameSelected ? '' : `${gameStructure.gameURL}?gameSymbol=${symbol}&lang=en&cur=${this.currency}&jurisdiction=99`
       }
     },
     methods: {
