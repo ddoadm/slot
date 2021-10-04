@@ -27,7 +27,7 @@
                 <vs-chip color="danger" style="min-width: 60px;">
                   <b>RTP {{g.rtp}}</b>
                 </vs-chip>
-                <vs-button v-if="g.ready" color="primary" icon="play_arrow">
+                <vs-button v-if="g.ready" color="primary" icon="play_arrow" @click="gameSelected=i">
                   <b>Play</b>
                 </vs-button>
                 <vs-chip v-else color="warning" style="min-width: 60px;">
