@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h3 class="header-text">Pragmatic Play Slot Demo</h3>
-    <div class="header-input">
+    <div class="header-input" v-if="!gameSelected">
       <vs-input icon="search" label="Search" placeholder="Search" v-model="search"/>
       <vs-select
       class="currency"
@@ -14,7 +14,7 @@
 
     <div class="game-list" v-if="!gameSelected">
       <vs-row vs-justify="center">
-        <vs-col class="game" v-for="g in gameStructure.games" type="flex" vs-justify="center" vs-align="center" vs-lg="3" vs-sm="4" vs-xs="6">
+        <vs-col class="game" v-for="g in searchedData" type="flex" vs-justify="center" vs-align="center" vs-lg="3" vs-sm="4" vs-xs="6">
           <vs-card class="cardx" fixedHeight>
             <div slot="header">
               <h3 v-html="g.name"></h3>
@@ -39,6 +39,13 @@
         </vs-col>
       </vs-row>
       <!-- {{gameStructure}} -->
+    </div>
+
+    <div class="play-game" >
+      <h4 v-html="searchedData[gameSelected].name" style="text-align: center;padding: 8px;"></h4>
+      <div class="container-iframe">
+        <iframe src="" class="responsive-iframe" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +77,24 @@
   .game {
     padding: 8px;
   }
+  .container-iframe {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 75%; /* 4:3 Aspect Ratio */
+}
+
+/* Then style the iframe to fit in the container div with full height and width */
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 </style>
 
 <script>
@@ -81,8 +106,16 @@
       search: '',
       currencies: currencyData,
       currency: 'IDR',
-      gameStructure: gameStructure,
-      gameSelected: ''
-    })
+      gameSelected: '3'
+    }),
+    computed: {
+      searchedData: function() {
+        let searchPattern = new RegExp(this.search)
+
+        return gameStructure.games.filter(game => {
+          return searchPattern.test(game.name)
+        })
+      }
+    }
   }
 </script>
