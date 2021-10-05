@@ -122,7 +122,7 @@
         })
       },
       gameTitle: function() {
-        return this.gameSelected ? gameStructure.games[this.gameSelected].name : 'Pragmatic Play Slot Demo'
+        return this.gameSelected ? this.searchedData[this.gameSelected].name : 'Pragmatic Play Slot Demo'
       },
       selectedGame: function() {
         let symbol = this.gameSelected ? this.searchedData[this.gameSelected].symbol : ''
